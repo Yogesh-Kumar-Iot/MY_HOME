@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🏠 My Smart Room Controller</title>
+  <title>🏠 YOGESH</title>
 
   <!-- Google Fonts: Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
   <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
 
   <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <style>
-    /* Reset and Base Styles */
     * {
       margin: 0;
       padding: 0;
@@ -24,7 +23,8 @@
     }
 
     body {
-      background-color: #121212;
+      background: #121212 url('https://images.unsplash.com/photo-1505409859467-3a78d0a8a7c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=70') no-repeat center center fixed;
+      background-size: cover;
       color: #e0e0e0;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
@@ -32,16 +32,17 @@
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      transition: background-color 0.3s ease;
+      backdrop-filter: brightness(0.6);
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       margin: 20px 0 30px;
       color: #bb86fc;
       font-weight: 600;
       text-align: center;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
+      text-shadow: 0 0 10px rgba(187, 134, 252, 0.3);
     }
 
     /* Loader */
@@ -49,10 +50,11 @@
       border: 5px solid #333;
       border-top: 5px solid #bb86fc;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       animation: spin 1s linear infinite;
       margin: 40px auto;
+      box-shadow: 0 0 15px rgba(187, 134, 252, 0.2);
     }
 
     @keyframes spin {
@@ -64,7 +66,7 @@
     .controls-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 25px;
       max-width: 900px;
       width: 100%;
     }
@@ -77,35 +79,53 @@
 
     /* Card Styles */
     .card {
-      background: rgba(30, 30, 30, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      background: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, #bb86fc, #03dac6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
 
     .device-name {
-      font-size: 1.3rem;
-      margin-bottom: 15px;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
       color: #ffffff;
       font-weight: 600;
     }
 
     .icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
+      font-size: 2.8rem;
+      margin-bottom: 18px;
       color: #bb86fc;
+      text-shadow: 0 0 8px rgba(187, 134, 252, 0.4);
     }
 
     /* Toggle Button */
@@ -116,17 +136,17 @@
       position: relative;
       cursor: pointer;
       background-color: #cf6679;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(207, 102, 121, 0.4);
+      transition: all 0.4s ease;
+      box-shadow: 0 4px 12px rgba(207, 102, 121, 0.3);
     }
 
     .toggle-btn.on {
       background-color: #03dac6;
-      box-shadow: 0 0 15px rgba(3, 218, 198, 0.5);
+      box-shadow: 0 0 20px rgba(3, 218, 198, 0.5);
     }
 
     .toggle-btn:hover {
-      box-shadow: 0 0 20px rgba(3, 218, 198, 0.4);
+      box-shadow: 0 0 25px rgba(3, 218, 198, 0.4);
     }
 
     .toggle-btn::before {
@@ -138,22 +158,43 @@
       height: 40px;
       border-radius: 50%;
       background-color: white;
-      transition: transform 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .toggle-btn.on::before {
       transform: translateX(50px);
     }
 
+    /* Ripple Effect */
+    .toggle-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+    }
+
+    .toggle-btn.ripple::after {
+      width: 200px;
+      height: 200px;
+      opacity: 0.5;
+    }
+
     /* Status Label */
     .status {
-      margin-top: 15px;
-      font-size: 1.1rem;
+      margin-top: 16px;
+      font-size: 1.15rem;
       font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -169,17 +210,17 @@
     }
 
     .status i {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
     /* Fade Animation */
-    .fade {
-      animation: fadeIn 0.3s ease forwards;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .fade {
+      animation: fadeIn 0.4s ease forwards;
     }
   </style>
 </head>
@@ -191,27 +232,17 @@
 
   <!-- Controls Grid -->
   <div id="controls" class="controls-grid" style="display: none;">
-    <!-- Plug 1 -->
+    <!-- 1. Light -->
     <div class="card">
-      <i class="icon fas fa-plug"></i>
-      <div class="device-name">Plug 1</div>
-      <div id="plug1-toggle" class="toggle-btn" data-device="relay1"></div>
-      <div id="plug1-status" class="status off">
+      <i class="icon fas fa-lightbulb"></i>
+      <div class="device-name">Light</div>
+      <div id="light-toggle" class="toggle-btn" data-device="relay4"></div>
+      <div id="light-status" class="status off">
         <i class="fas fa-circle"></i> OFF
       </div>
     </div>
 
-    <!-- Plug 2 -->
-    <div class="card">
-      <i class="icon fas fa-plug"></i>
-      <div class="device-name">Plug 2</div>
-      <div id="plug2-toggle" class="toggle-btn" data-device="relay2"></div>
-      <div id="plug2-status" class="status off">
-        <i class="fas fa-circle"></i> OFF
-      </div>
-    </div>
-
-    <!-- Fan -->
+    <!-- 2. Fan -->
     <div class="card">
       <i class="icon fas fa-fan"></i>
       <div class="device-name">Fan</div>
@@ -221,19 +252,32 @@
       </div>
     </div>
 
-    <!-- Light -->
+    <!-- 3. Plug 1 -->
     <div class="card">
-      <i class="icon fas fa-lightbulb"></i>
-      <div class="device-name">Light</div>
-      <div id="light-toggle" class="toggle-btn" data-device="relay4"></div>
-      <div id="light-status" class="status off">
+      <i class="icon fas fa-plug"></i>
+      <div class="device-name">Plug 1</div>
+      <div id="plug1-toggle" class="toggle-btn" data-device="relay1"></div>
+      <div id="plug1-status" class="status off">
+        <i class="fas fa-circle"></i> OFF
+      </div>
+    </div>
+
+    <!-- 4. Plug 2 -->
+    <div class="card">
+      <i class="icon fas fa-plug"></i>
+      <div class="device-name">Plug 2</div>
+      <div id="plug2-toggle" class="toggle-btn" data-device="relay2"></div>
+      <div id="plug2-status" class="status off">
         <i class="fas fa-circle"></i> OFF
       </div>
     </div>
   </div>
 
+  <!-- Click Sound -->
+  <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio>
+
   <script>
-    // Firebase Configuration
+    // 🔧 Firebase Configuration (cleaned up – no extra spaces!)
     const firebaseConfig = {
       apiKey: "AIzaSyCnN-MRhRmZCwDF8W-2Cxh_KcQnagGW8gY",
       authDomain: "my-room-72200.firebaseapp.com",
@@ -248,7 +292,7 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // Reference to room devices
+    // 🔗 Device map: Firebase path → UI elements
     const devices = {
       relay1: { toggle: 'plug1-toggle', status: 'plug1-status' },
       relay2: { toggle: 'plug2-toggle', status: 'plug2-status' },
@@ -259,23 +303,32 @@
     // DOM Elements
     const loader = document.getElementById('loader');
     const controls = document.getElementById('controls');
+    const clickSound = document.getElementById('click-sound');
 
-    // Wait for DOM to load
+    // Play soft click on user action only
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(e => console.log("Audio play failed (optional):", e));
+    }
+
+    // DOM loaded
     document.addEventListener('DOMContentLoaded', () => {
-      // Connect to each device in Firebase
       Object.keys(devices).forEach(deviceKey => {
         const toggleId = devices[deviceKey].toggle;
         const statusId = devices[deviceKey].status;
         const toggleBtn = document.getElementById(toggleId);
         const statusEl = document.getElementById(statusId);
-
         const dbRef = database.ref(`room/${deviceKey}`);
 
-        // Listen for changes from Firebase
+        let isUpdating = false; // Prevent double-toggle
+
+        // Listen for Firebase updates
         dbRef.on('value', (snapshot) => {
           const state = snapshot.val();
-          updateUI(toggleBtn, statusEl, state);
-          // Show controls after initial data load
+          const isOn = state === "ON";
+          updateUI(toggleBtn, statusEl, isOn);
+
+          // Show UI after first data load
           if (loader.style.display !== 'none') {
             setTimeout(() => {
               loader.style.display = 'none';
@@ -285,36 +338,39 @@
           }
         });
 
-        // Toggle button click handler
+        // User click handler
         toggleBtn.addEventListener('click', () => {
-          dbRef.once('value').then((snapshot) => {
+          if (isUpdating) return;
+          isUpdating = true;
+          toggleBtn.classList.add('ripple');
+          setTimeout(() => toggleBtn.classList.remove('ripple'), 600);
+
+          playClick(); // Feedback sound
+
+          dbRef.once('value').then(snapshot => {
             const currentState = snapshot.val();
             const newState = currentState === "ON" ? "OFF" : "ON";
-            dbRef.set(newState);
+            dbRef.set(newState).then(() => {
+              isUpdating = false;
+            }).catch(err => {
+              console.error("Failed to update Firebase:", err);
+              isUpdating = false;
+            });
           });
         });
       });
     });
 
     // Update UI based on state
-    function updateUI(toggleBtn, statusEl, state) {
-      const isOn = state === "ON";
-
-      // Update toggle button
-      if (isOn) {
-        toggleBtn.classList.add('on');
-      } else {
-        toggleBtn.classList.remove('on');
-      }
-
-      // Update status
+    function updateUI(toggleBtn, statusEl, isOn) {
+      toggleBtn.classList.toggle('on', isOn);
       statusEl.classList.remove('on', 'off');
       statusEl.classList.add(isOn ? 'on' : 'off');
       statusEl.innerHTML = isOn 
         ? '<i class="fas fa-circle"></i> ON' 
         : '<i class="fas fa-circle"></i> OFF';
-      
-      // Force reflow for animation
+
+      // Trigger animation
       void statusEl.offsetWidth;
       statusEl.classList.add('fade');
     }
